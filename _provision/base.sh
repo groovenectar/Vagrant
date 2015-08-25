@@ -13,22 +13,22 @@ sudo apt-get update
 sudo apt-get install -qq curl unzip git-core ack-grep software-properties-common build-essential
 
 # Disable case sensitivity
-shopt -s nocasematch
+sudo shopt -s nocasematch
 
 if [[ ! -z $1 && ! $1 =~ false && $1 =~ ^[0-9]*$ ]]; then
 	echo ">>> Setting up Swap ($1 MB)"
 
 	# Create the Swap file
-	fallocate -l $1M /swapfile
+	sudo fallocate -l $1M /swapfile
 
 	# Set the correct Swap permissions
-	chmod 600 /swapfile
+	sudo chmod 600 /swapfile
 
 	# Setup Swap space
-	mkswap /swapfile
+	sudo mkswap /swapfile
 
 	# Enable Swap space
-	swapon /swapfile
+	sudo swapon /swapfile
 
 	# Make the Swap file permanent
 	echo "/swapfile   none    swap    sw    0   0" | tee -a /etc/fstab
@@ -36,12 +36,11 @@ if [[ ! -z $1 && ! $1 =~ false && $1 =~ ^[0-9]*$ ]]; then
 	# Add some swap settings:
 	# vm.swappiness=10: Means that there wont be a Swap file until memory hits 90% useage
 	# vm.vfs_cache_pressure=50: read http://rudd-o.com/linux-and-free-software/tales-from-responsivenessland-why-linux-feels-slow-and-how-to-fix-that
-	printf "vm.swappiness=10\nvm.vfs_cache_pressure=50" | tee -a /etc/sysctl.conf && sysctl -p
-
+	sudo printf "vm.swappiness=10\nvm.vfs_cache_pressure=50" | sudo tee -a /etc/sysctl.conf && sysctl -p
 fi
 
 # Enable case sensitivity
-shopt -u nocasematch
+sudo shopt -u nocasematch
 
 echo ">>> Setting up ll alias"
 echo "alias ll='ls -la'" >> /home/vagrant/.bash_aliases

@@ -52,6 +52,8 @@ if ARGV[0] == 'up'
 	end
 end
 
+scripts_path = "https://raw.githubusercontent.com/groovenectar/vagrant/master/_provision/"
+
 Vagrant.configure("2") do |config|
 	# Set server to Debian
 	config.vm.box = "debian/jessie64"
@@ -91,29 +93,29 @@ Vagrant.configure("2") do |config|
 		# vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
 	end
 
-	config.vm.provision :shell, path: '_provision/base.sh', args: [server_swap, server_timezone]
-	config.vm.provision :shell, path: '_provision/base_privileged.sh', privileged: true
+	config.vm.provision :shell, path: "#{scripts_path}base.sh", args: [server_swap, server_timezone]
+	config.vm.provision :shell, path: "#{scripts_path}base_privileged.sh", privileged: true
 
 	# Provision PHP
-	config.vm.provision :shell, path: '_provision/php.sh', args: [php_timezone, hhvm]
+	config.vm.provision :shell, path: "#{scripts_path}php.sh", args: [php_timezone, hhvm]
 
 	# Provision Nginx Base
-	config.vm.provision :shell, path: '_provision/nginx.sh', args: [server_ip, public_folder, synced_folder, hostname]
+	config.vm.provision :shell, path: "#{scripts_path}nginx.sh", args: [server_ip, public_folder, synced_folder, hostname]
 
 	# Provision Apache Base
-	# config.vm.provision "shell", path: '_provision/apache.sh', args: [server_ip, public_folder, synced_folder, hostname]
+	# config.vm.provision "shell", path: "#{scripts_path}apache.sh", args: [server_ip, public_folder, synced_folder, hostname]
 
 	# Provision MySQL
-	# config.vm.provision "shell", path: '_provision/mysql.sh', args: [mysql_root_password, mysql_version, mysql_enable_remote]
+	# config.vm.provision "shell", path: "#{scripts_path}mysql.sh", args: [mysql_root_password, mysql_version, mysql_enable_remote]
 
 	# Provision Composer
-	config.vm.provision "shell", path: '_provision/composer.sh', privileged: false
+	config.vm.provision "shell", path: "#{scripts_path}composer.sh", privileged: false
 
 	# Install Mailcatcher
-	# config.vm.provision "shell", path: '_provision/mailcatcher.sh'
+	# config.vm.provision "shell", path: "#{scripts_path}mailcatcher.sh"
 
 	# Extra provisioning
 	if (File.exist?('provision.sh'))
-		config.vm.provision "shell", path: 'provision.sh', args: [server_ip, public_folder, synced_folder, hostname]
+		config.vm.provision "shell", path: "provision.sh", args: [server_ip, public_folder, synced_folder, hostname]
 	end
 end
