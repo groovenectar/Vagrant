@@ -46,7 +46,11 @@ http_url=""
 https_url=""
 
 echo ">>> Installing Ngrok"
-sudo apt-get install -qq ngrok-client
+# sudo apt-get install -qq ngrok-client > /dev/null 2>&1
+wget -q https://dl.ngrok.com/ngrok_2.0.19_linux_amd64.zip
+unzip ngrok_2.0.19_linux_amd64.zip
+sudo mv ngrok /usr/bin/ngrok
+rm ngrok_2.0.19_linux_amd64.zip
 
 cd ${public_folder}
 

@@ -22,11 +22,11 @@ if [[ $HHVM == "true" ]]; then
 	echo deb http://dl.hhvm.com/debian jessie main | sudo tee /etc/apt/sources.list.d/hhvm.list
 
 	# Update
-	sudo apt-get update
+	sudo apt-get update > /dev/null 2>&1
 
 	# Install HHVM
 	# -qq implies -y --force-yes
-	sudo apt-get install -qq hhvm
+	sudo apt-get install -qq hhvm > /dev/null 2>&1
 
 	# Start on system boot
 	sudo update-rc.d hhvm defaults
@@ -38,7 +38,7 @@ if [[ $HHVM == "true" ]]; then
 else
 	echo ">>> Installing PHP"
 
-	sudo apt-get install -qq php5 php5-common php5-cli php5-fpm php5-mysql php5-curl php5-gd php5-gmp php5-mcrypt php5-memcached php5-imagick php5-intl php5-xdebug
+	sudo apt-get install -qq php5 php5-common php5-cli php5-fpm php5-mysql php5-curl php5-gd php5-gmp php5-mcrypt php5-memcached php5-imagick php5-intl php5-xdebug > /dev/null 2>&1
 
 	# Using PHP-FPM for Nginx
 	if [ ${NGINX_IS_INSTALLED} -eq 0 ]; then
@@ -51,7 +51,7 @@ else
 	# If Apache is installed, get the PHP5 module for it
 	if [[ $APACHE_IS_INSTALLED -eq 0 ]]; then
 		# PHP Config for Apache
-		sudo apt-get install -qq libapache2-mod-php5
+		sudo apt-get install -qq libapache2-mod-php5 > /dev/null 2>&1
 		# Should auto-enable
 		# sudo a2enmod libapache2-mod-php5
 	fi
@@ -97,5 +97,5 @@ EOF
 	sudo sed -i "s/;date.timezone =.*/date.timezone = ${PHP_TIMEZONE/\//\\/}/" /etc/php5/fpm/php.ini
 	sudo sed -i "s/;date.timezone =.*/date.timezone = ${PHP_TIMEZONE/\//\\/}/" /etc/php5/cli/php.ini
 
-	sudo service php5-fpm restart
+	sudo service php5-fpm restart > /dev/null 2>&1
 fi
