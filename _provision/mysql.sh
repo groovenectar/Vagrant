@@ -51,12 +51,12 @@ fi
 
 # Install MySQL without password prompt
 # Set username and password to 'root'
-sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password $1"
-sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $1"
+# sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password $1"
+# sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $1"
 
 # Install MySQL Server
 # -qq implies -y --force-yes
-sudo apt-get install -qq mysql-server mysql-client
+# sudo apt-get install -qq mysql-server mysql-client
 
 if [[ ! -z ${database_name} ]]; then
 	echo ">>> Create new database"
