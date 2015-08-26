@@ -6,6 +6,8 @@ echo ">>> Installing MySQL Server"
 
 [[ -z "$1" ]] && { echo "!!! MySQL root password not set. Check the Vagrant file."; exit 1; }
 
+mysql_enable_remote="$2"
+
 if [[ ! -z $3 ]]; then
 	database_name="$3"
 fi
@@ -51,12 +53,12 @@ fi
 
 # Install MySQL without password prompt
 # Set username and password to 'root'
-# sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password $1"
-# sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $1"
+sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password $1"
+sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $1"
 
 # Install MySQL Server
 # -qq implies -y --force-yes
-# sudo apt-get install -qq mysql-server mysql-client
+sudo apt-get install -qq mysql-server mysql-client
 
 if [[ ! -z ${database_name} ]]; then
 	echo ">>> Create new database"
