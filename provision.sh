@@ -54,8 +54,14 @@ cd ${public_folder}
 # git checkout develop
 
 # MAGENTO - Set the hostname in config
-# mysql --user="${database_user}" --password="${database_pass}" -e 'UPDATE '"${database_name}"'.'"${database_table_prefix}"'core_config_data SET value = "'"${http_url}"'" WHERE path = "web/unsecure/base_url"' "${database_name}"
-# mysql --user="${database_user}" --password="${database_pass}" -e 'UPDATE '"${database_name}"'.'"${database_table_prefix}"'core_config_data SET value = "'"${https_url}"'" WHERE path = "web/secure/base_url"' "${database_name}"
+# Run on first `vagrant ssh` then delete the script
+# script="#!/usr/bin/env bash
+# mysql --user=\"${database_user}\" --password=\"${database_pass}\" -e 'UPDATE \`${database_name}\`.\`${database_table_prefix}core_config_data\` SET value = \"${http_url}\" WHERE path = \"web/unsecure/base_url\"' \"${database_name}\"
+# mysql --user=\"${database_user}\" --password=\"${database_pass}\" -e 'UPDATE \`${database_name}\`.\`${database_table_prefix}core_config_data\` SET value = \"${https_url}\" WHERE path = \"web/secure/base_url\"' \"${database_name}\"
+# rm /etc/profile.d/magento_mysql.sh"
+# sudo echo "${script}" | sudo tee -a /etc/profile.d/magento_mysql.sh
+# sudo chmod u+x /etc/profile.d/magento_mysql.sh
+# sudo chown vagrant:vagrant /etc/profile.d/magento_mysql.sh
 
 # echo ">>> Installing Composer dependencies"
 # composer install

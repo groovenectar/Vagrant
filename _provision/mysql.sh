@@ -89,7 +89,8 @@ if [[ -n ${remote_database_ssh_user} ]]; then
 	sudo chown vagrant:vagrant /etc/profile.d
 
 	if [[ ${mysql_remote_pull_script} =~ '://' ]]; then
-		curl --silent -L ${mysql_remote_pull_script} > ${script_path}
+		curl --silent -L ${mysql_remote_pull_script} > mysql_remote_pull.sh
+		sudo mv mysql_remote_pull.sh ${script_path}
 	else
 		sudo cp ${synced_folder}/${mysql_remote_pull_script} ${script_path}
 	fi
