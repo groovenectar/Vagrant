@@ -43,7 +43,7 @@ fi
 
 # Install Nginx
 # -qq implies -y --force-yes
-sudo apt-get install -qq nginx
+sudo apt-get install -qq nginx || true
 
 # Turn off sendfile to be more compatible with Windows, which can't use NFS
 sudo sed -i 's/sendfile on;/sendfile off;/' /etc/nginx/nginx.conf
@@ -77,7 +77,7 @@ fi
 if [[ $HHVM_IS_INSTALLED -ne 0 && $PHP_IS_INSTALLED -eq 0 ]]; then
 	# PHP-FPM Config for Nginx
 	sudo sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
-	sudo service php5-fpm restart
+	sudo service php5-fpm restart || true
 fi
 
-sudo service nginx restart
+sudo service nginx restart || true

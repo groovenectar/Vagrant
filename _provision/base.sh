@@ -8,7 +8,7 @@ echo "alias sudo='sudo '" >> /home/vagrant/.bash_aliases
 source /home/vagrant/.bash_aliases
 
 echo ">>> Setting Timezone & Locale to $2 & C.UTF-8"
-sudo timedatectl set-timezone $2
+sudo timedatectl set-timezone $2 || true
 
 # Try to supress (harmless message): dpkg-preconfigure: unable to re-open stdin: No such file or directory
 # This does not work on Debian
@@ -19,12 +19,12 @@ sudo timedatectl set-timezone $2
 # dpkg-reconfigure locales
 
 echo ">>> Updating packages"
-sudo apt-get update
+sudo apt-get update || true
 # sudo apt-get upgrade
 
 # Install base packages
 # -qq implies -y --force-yes
-sudo apt-get install -qq curl unzip git-core ack-grep software-properties-common build-essential
+sudo apt-get install -qq curl unzip git-core ack-grep software-properties-common build-essential || true
 
 # Disable case sensitivity
 shopt -s nocasematch
@@ -58,6 +58,6 @@ shopt -u nocasematch
 
 # echo ">>> Installing Screen"
 # -qq implies -y --force-yes
-# sudo apt-get install -qq screen
+# sudo apt-get install -qq screen || true
 # sudo touch /home/vagrant/.screenrc
 # sudo echo -e "startup_message off\ncaption always '%{= dg} %H %{G}%=%?%{d}%-w%?%{r}(%{d}%n %t%? {%u} %?%{r})%{d}%?%+w%?%=%{G} %{B}%M %d %c:%s '" >> /home/vagrant/.screenrc
