@@ -42,8 +42,8 @@ if [[ ! -z $8 ]]; then
 fi
 
 database_table_prefix=""
-http_url=""
-https_url=""
+http_url="http://${hostname}/"
+https_url="http://${hostname}/"
 
 echo ">>> Installing Ngrok"
 # sudo apt-get install -qq ngrok-client || true
