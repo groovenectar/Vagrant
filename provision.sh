@@ -52,6 +52,9 @@ unzip ngrok_2.0.19_linux_amd64.zip
 sudo mv ngrok /usr/bin/ngrok
 rm ngrok_2.0.19_linux_amd64.zip
 
+# echo ">>> Installing Modman"
+# sudo bash < <(wget -q --no-check-certificate -O - https://raw.github.com/groovenectar/modman/master/modman-installer)
+
 cd ${public_folder}
 
 # echo ">>> Checking out develop branch"
