@@ -26,11 +26,11 @@ server_ip     = "172.23.103.200" # Static IP
 # server_ip   = "172.#{Random.new.rand(16..31)}.#{Random.new.rand(0..255)}.#{Random.new.rand(1..254)}"
 
 # Magento < 1.9 needs PHP <= 5.5
-vm_box = "debian/jessie64"  # Debian 8, PHP 5.6, MySQL 5.5
+# vm_box = "debian/jessie64"  # Debian 8, PHP 5.6, MySQL 5.5
 # vm_box = "debian/wheezy64"  # Debian 7, PHP 5.4, MySQL 5.5
 # vm_box = "ubuntu/vivid64"   # Ubuntu 15.04, PHP 5.6, MySQL 5.5
 # vm_box = "ubuntu/trusty64"  # Ubuntu 14.04, PHP 5.5, MySQL 5.5
-# vm_box = "ubuntu/precise64" # Ubuntu 12.04, PHP 5.3, MySQL 5.5
+vm_box = "ubuntu/precise64" # Ubuntu 12.04, PHP 5.3, MySQL 5.5
 
 webserver = "nginx" # ["nginx"|"apache"|"none"]
 
