@@ -49,6 +49,10 @@ cd ${public_folder}
 # echo ">>> Checking out develop branch"
 # git checkout develop
 
+# MAGENTO - Set the hostname in config
+# mysql --user="${dbuser[local]}" --password="${dbpass[local]}" -e 'UPDATE '"${database}"'.'"${dbprefix[local]}"'core_config_data SET value = "'"${http_url}"'" WHERE path = "web/unsecure/base_url"' "${database}"
+# mysql --user="${dbuser[local]}" --password="${dbpass[local]}" -e 'UPDATE '"${database}"'.'"${dbprefix[local]}"'core_config_data SET value = "'"${https_url}"'" WHERE path = "web/secure/base_url"' "${database}"
+
 # echo ">>> Installing Composer dependencies"
 # composer install
 
