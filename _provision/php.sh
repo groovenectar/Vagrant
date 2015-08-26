@@ -2,9 +2,9 @@
 
 export DEBIAN_FRONTEND=noninteractive
 export LANG=C.UTF-8
+
 PHP_TIMEZONE=$1
 HHVM=$2
-# PHP_VERSION=$3
 
 # Test if Apache is installed
 sudo apachectl -v > /dev/null 2>&1

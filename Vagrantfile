@@ -26,10 +26,10 @@ server_ip     = "172.23.103.204" # Static IP
 # server_ip   = "172.#{Random.new.rand(16..31)}.#{Random.new.rand(0..255)}.#{Random.new.rand(1..254)}"
 
 # Magento < 1.9 needs PHP <= 5.5
-# vm_box = "debian/jessie64" # Debian 8, PHP 5.6, MySQL 5.5
-# vm_box = "debian/wheezy64" # Debian 7, PHP 5.4, MySQL 5.5
-vm_box = "ubuntu/vivid64"  # Ubuntu 15.04, PHP 5.6, MySQL 5.5
-# vm_box = "ubuntu/trusty64" # Ubuntu 14.04, PHP 5.5, MySQL 5.5
+vm_box = "debian/jessie64"  # Debian 8, PHP 5.6, MySQL 5.5
+# vm_box = "debian/wheezy64"  # Debian 7, PHP 5.4, MySQL 5.5
+# vm_box = "ubuntu/vivid64"   # Ubuntu 15.04, PHP 5.6, MySQL 5.5
+# vm_box = "ubuntu/trusty64"  # Ubuntu 14.04, PHP 5.5, MySQL 5.5
 # vm_box = "ubuntu/precise64" # Ubuntu 12.04, PHP 5.3, MySQL 5.5
 
 webserver = "apache" # ["nginx"|"apache"|"none"]
@@ -132,7 +132,7 @@ Vagrant.configure("2") do |config|
 		# to sleep for instance, then some 3rd party services will reject requests.
 		vb.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 10000]
 		# Prevent VMs running on Ubuntu to lose internet connection
-		if ("#{vm_box}" == 'ubuntu/vivid64' || "#{vm_box}" == 'ubuntu/trusty64')
+		if ("#{vm_box}" == 'ubuntu/vivid64' || "#{vm_box}" == 'ubuntu/trusty64' || "#{vm_box}" == 'ubuntu/precise64')
 			vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
 			vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
 		end
