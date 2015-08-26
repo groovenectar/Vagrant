@@ -105,13 +105,13 @@ if [[ -n ${remote_database_ssh_user} ]]; then
 	sudo sed -i "s#=\"\${8}#=\"${remote_database_pass}#g" ${script_path}
 
 	# Prompt to delete from startup
-	printf "\n\necho && read -p \"Finished. Remove from startup? \" -n 1 -r && if [[ $REPLY =~ ^[Yy]$ ]]; then rm ${link_path}; echo; echo; fi" | sudo tee -a ${script_path}
+	printf "\n\necho; read -p \"Finished. Remove from startup? \" -n 1 -r; if [[ \$REPLY =~ ^[Yy]$ ]]; then rm ${link_path}; echo; echo; fi" | sudo tee -a ${script_path}
 
 	# Allow vagrant user to delete it
 	sudo chmod u+x ${script_path}
 	sudo chown vagrant:vagrant ${script_path}
 	sudo ln -s ${script_path} ${link_path}
-	sudo chown vagrant:vagrant ${link_path}
+	sudo chown -h vagrant:vagrant ${link_path}
 fi
 
 # Make MySQL connectable from outside world without SSH tunnel
