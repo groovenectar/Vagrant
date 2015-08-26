@@ -58,10 +58,11 @@ cd ${public_folder}
 # script="#!/usr/bin/env bash
 # mysql --user=\"${database_user}\" --password=\"${database_pass}\" -e 'UPDATE \`${database_name}\`.\`${database_table_prefix}core_config_data\` SET value = \"${http_url}\" WHERE path = \"web/unsecure/base_url\"' \"${database_name}\"
 # mysql --user=\"${database_user}\" --password=\"${database_pass}\" -e 'UPDATE \`${database_name}\`.\`${database_table_prefix}core_config_data\` SET value = \"${https_url}\" WHERE path = \"web/secure/base_url\"' \"${database_name}\"
-# rm /etc/profile.d/magento_mysql.sh"
-# sudo echo "${script}" | sudo tee -a /etc/profile.d/magento_mysql.sh
-# sudo chmod u+x /etc/profile.d/magento_mysql.sh
-# sudo chown vagrant:vagrant /etc/profile.d/magento_mysql.sh
+# rm /etc/profile.d/9999_magento_mysql.sh"
+# sudo echo "${script}" | sudo tee -a /etc/profile.d/9999_magento_mysql.sh
+# sudo chmod u+x /etc/profile.d/9999_magento_mysql.sh
+# sudo chown vagrant:vagrant /etc/profile.d/9999_magento_mysql.sh
+# echo "Magento config will be updated on first \`vagrant ssh\`"
 
 # echo ">>> Installing Composer dependencies"
 # composer install

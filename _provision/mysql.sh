@@ -84,13 +84,12 @@ if [[ -n ${remote_database_ssh_user} ]]; then
 	# ssh "${remote_database_ssh_user}@${remote_database_ssh_host}" mysqldump --user="${remote_database_user}" --password="\"${remote_database_pass}\"" "${remote_database_name}" | mysql -uroot -p"${mysql_root_password}" "${database_name}"
 
 	# So do it on first boot, in a subdir so we can delete it
-	script_path="/etc/profile.d/mysql_remote_pull.sh"
+	script_path="/etc/profile.d/0001_mysql_remote_pull.sh"
 	# Make this vagrant user so we can delete the file later without sudo
 	sudo chown vagrant:vagrant /etc/profile.d
 
 	if [[ ${mysql_remote_pull_script} =~ '://' ]]; then
-		curl --silent -L ${mysql_remote_pull_script} > mysql_remote_pull.sh
-		sudo mv mysql_remote_pull.sh ${script_path}
+		sudo curl --silent -L ${mysql_remote_pull_script} > ${script_path}
 	else
 		sudo cp ${synced_folder}/${mysql_remote_pull_script} ${script_path}
 	fi
@@ -105,7 +104,7 @@ if [[ -n ${remote_database_ssh_user} ]]; then
 	sudo sed -i "s#=\"\${8}#=\"${remote_database_pass}#g" ${script_path}
 
 	# Delete after first run
-	printf "\n\nrm ${script_path}" | sudo tee -a ${script_path}
+	# printf "\n\nrm ${script_path}" | sudo tee -a ${script_path}
 
 	# Allow vagrant user to delete it
 	sudo chmod u+x ${script_path}
