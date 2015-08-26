@@ -64,6 +64,11 @@ if [[ ${conf_path} =~ '://' ]]; then
 else
 	sudo cp -f ${synced_folder}/${conf_path} /etc/nginx/nginx.conf
 fi
+num_cores=$(grep processor /proc/cpuinfo | wc -l)
+ulimit=$(ulimit -n)
+worker_connections=(num_cores*ulimit)
+sudo sed -i "s/worker_processes.*/worker_processes ${num_cores};/" /etc/nginx/nginx.conf
+sudo sed -i "s/worker_connections.*/worker_connections ${worker_connections};/" /etc/nginx/nginx.conf
 
 # Up some values
 sudo printf "\nfastcgi_connect_timeout 65;" | sudo tee -a /etc/nginx/fastcgi_params
