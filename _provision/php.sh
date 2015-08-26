@@ -40,22 +40,6 @@ else
 
 	sudo apt-get install -qq php5 php5-common php5-cli php5-fpm php5-mysql php5-curl php5-gd php5-gmp php5-mcrypt php5-memcached php5-imagick php5-intl php5-xdebug || true
 
-	# Using PHP-FPM for Nginx
-	if [[ ${NGINX_IS_INSTALLED} -eq 0 ]]; then
-		# Set PHP FPM to listen on TCP instead of Socket
-		sudo sed -i "s/listen =.*/listen = 127.0.0.1:9000/" /etc/php5/fpm/pool.d/www.conf
-		# Set PHP FPM allowed clients IP address
-		sudo sed -i "s/;listen.allowed_clients/listen.allowed_clients/" /etc/php5/fpm/pool.d/www.conf
-	fi
-
-	# If Apache is installed, get the PHP5 module for it
-	if [[ $APACHE_IS_INSTALLED -eq 0 ]]; then
-		# PHP Config for Apache
-		sudo apt-get install -qq libapache2-mod-php5 || true
-		# Should auto-enable
-		# sudo a2enmod libapache2-mod-php5
-	fi
-
 	# Set run-as user for PHP5-FPM processes to user/group "vagrant"
 	# to avoid permission errors from apps writing to files
 	sudo sed -i "s/user = www-data/user = vagrant/" /etc/php5/fpm/pool.d/www.conf
@@ -98,4 +82,22 @@ EOF
 	sudo sed -i "s/;date.timezone =.*/date.timezone = ${PHP_TIMEZONE/\//\\/}/" /etc/php5/cli/php.ini
 
 	sudo service php5-fpm restart || true
+
+	# Using PHP-FPM for Nginx
+	if [[ ${NGINX_IS_INSTALLED} -eq 0 ]]; then
+		# Set PHP FPM to listen on TCP instead of Socket
+		sudo sed -i "s/listen =.*/listen = 127.0.0.1:9000/" /etc/php5/fpm/pool.d/www.conf
+		# Set PHP FPM allowed clients IP address
+		sudo sed -i "s/;listen.allowed_clients/listen.allowed_clients/" /etc/php5/fpm/pool.d/www.conf
+		sudo service nginx restart || true
+	fi
+
+	# If Apache is installed, get the PHP5 module for it
+	if [[ $APACHE_IS_INSTALLED -eq 0 ]]; then
+		# PHP Config for Apache
+		sudo apt-get install -qq libapache2-mod-php5 || true
+		# Should auto-enable
+		# sudo a2enmod libapache2-mod-php5
+		sudo service apache2 restart || true
+	fi
 fi
