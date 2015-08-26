@@ -19,4 +19,3 @@ if [[ -n ${remote_database_pass} ]]; then
 else
 	ssh "${remote_database_ssh_user}@${remote_database_ssh_host}" mysqldump --user="${remote_database_user}" -p "${remote_database_name}" | mysql -u"${database_user}" -p"${database_pass}" "${database_name}"
 fi
-

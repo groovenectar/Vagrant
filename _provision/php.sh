@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 
 export DEBIAN_FRONTEND=noninteractive
-
 export LANG=C.UTF-8
-
 PHP_TIMEZONE=$1
 HHVM=$2
-PHP_VERSION=$3
+# PHP_VERSION=$3
 
 # Test if Apache is installed
 sudo apachectl -v > /dev/null 2>&1
@@ -50,7 +48,7 @@ else
 		sudo sed -i "s/;listen.allowed_clients/listen.allowed_clients/" /etc/php5/fpm/pool.d/www.conf
 	fi
 
-	# If PHP is installed or HHVM is installed, proxy PHP requests to it
+	# If Apache is installed, get the PHP5 module for it
 	if [[ $APACHE_IS_INSTALLED -eq 0 ]]; then
 		# PHP Config for Apache
 		sudo apt-get install -qq libapache2-mod-php5
