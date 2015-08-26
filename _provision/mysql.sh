@@ -4,40 +4,49 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo ">>> Installing MySQL Server"
 
-[[ -z "$1" ]] && { echo "!!! MySQL root password not set. Check the Vagrant file."; exit 1; }
+[[ -z ${1} ]] && { echo "!!! MySQL root password not set. Check the Vagrant file."; exit 1; }
 
-mysql_enable_remote="$2"
+mysql_root_password="${1}"
+mysql_enable_remote="${2}"
 
-if [[ ! -z $3 ]]; then
-	database_name="$3"
+if [[ -n ${3} ]]; then
+	database_name="${3}"
 fi
 
-if [[ ! -z $4 ]]; then
-	database_user="$4"
+if [[ -n ${4} ]]; then
+	database_user="${4}"
 fi
 
-if [[ ! -z $5 ]]; then
-	database_pass="$5"
+if [[ -n ${5} ]]; then
+	database_pass="${5}"
 fi
 
-if [[ ! -z $6 ]]; then
-	remote_database_ssh_user="$6"
+if [[ -n ${6} ]]; then
+	remote_database_ssh_user="${6}"
 fi
 
-if [[ ! -z $7 ]]; then
-	remote_database_ssh_host="$7"
+if [[ -n ${7} ]]; then
+	remote_database_ssh_host="${7}"
 fi
 
-if [[ ! -z $8 ]]; then
-	remote_database_user="$8"
+if [[ -n ${8} ]]; then
+	remote_database_name="${8}"
 fi
 
-if [[ ! -z $9 ]]; then
-	remote_database_pass="$9"
+if [[ -n ${9} ]]; then
+	remote_database_user="${9}"
 fi
 
-if [[ ! -z $10 ]]; then
-	remote_database_pass="$10"
+if [[ -n ${10} ]]; then
+	remote_database_pass="${10}"
+fi
+
+if [[ -n ${11} ]]; then
+	synced_folder="${11}"
+fi
+
+if [[ -n ${12} ]]; then
+	mysql_remote_pull_script="${12}"
 fi
 
 # if [ ${mysql_version} == "5.6" ]; then
@@ -71,7 +80,35 @@ if [[ ! -z ${database_name} ]]; then
 fi
 
 if [[ ! -z ${remote_database_ssh_user} ]]; then
-	ssh "${remote_database_ssh_user}@${remote_database_ssh_host}" mysqldump --user="${remote_database_user}" --password="\"${remote_database_pass}\"" "${remote_database_name}" | mysql -uroot -p"${mysql_root_password}" "${database_name}"
+	# Can't prompt for SSH password during provision
+	# ssh "${remote_database_ssh_user}@${remote_database_ssh_host}" mysqldump --user="${remote_database_user}" --password="\"${remote_database_pass}\"" "${remote_database_name}" | mysql -uroot -p"${mysql_root_password}" "${database_name}"
+
+	# So do it on first boot, in a subdir so we can delete it
+	script_path="/etc/profile.d/mysql_remote_pull.sh"
+	# Make this vagrant user so we can delete the file later without sudo
+	sudo chown vagrant:vagrant /etc/profile.d
+
+	if [[ ${mysql_remote_pull_script} =~ '://' ]]; then
+		curl --silent -L ${mysql_remote_pull_script} > ${script_path}
+	else
+		sudo cp ${synced_folder}/${mysql_remote_pull_script} ${script_path}
+	fi
+
+	sudo sed -i "s#=\"\${1}#=\"${database_name}#g" ${script_path}
+	sudo sed -i "s#=\"\${2}#=\"${database_user}#g" ${script_path}
+	sudo sed -i "s#=\"\${3}#=\"${database_pass}#g" ${script_path}
+	sudo sed -i "s#=\"\${4}#=\"${remote_database_ssh_user}#g" ${script_path}
+	sudo sed -i "s#=\"\${5}#=\"${remote_database_ssh_host}#g" ${script_path}
+	sudo sed -i "s#=\"\${6}#=\"${remote_database_name}#g" ${script_path}
+	sudo sed -i "s#=\"\${7}#=\"${remote_database_user}#g" ${script_path}
+	sudo sed -i "s#=\"\${8}#=\"${remote_database_pass}#g" ${script_path}
+
+	# Delete after first run
+	printf "\n\nrm ${script_path}" | sudo tee -a ${script_path}
+
+	# Allow vagrant user to delete it
+	sudo chmod u+x ${script_path}
+	sudo chown vagrant:vagrant ${script_path}
 fi
 
 # Make MySQL connectable from outside world without SSH tunnel
