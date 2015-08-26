@@ -10,7 +10,7 @@ HHVM=$2
 sudo apachectl -v > /dev/null 2>&1
 APACHE_IS_INSTALLED=$?
 
-# Test if Nginc is installed
+# Test if Nginx is installed
 sudo nginx -v > /dev/null 2>&1
 NGINX_IS_INSTALLED=$?
 
@@ -41,7 +41,7 @@ else
 	sudo apt-get install -qq php5 php5-common php5-cli php5-fpm php5-mysql php5-curl php5-gd php5-gmp php5-mcrypt php5-memcached php5-imagick php5-intl php5-xdebug || true
 
 	# Using PHP-FPM for Nginx
-	if [ ${NGINX_IS_INSTALLED} -eq 0 ]; then
+	if [[ ${NGINX_IS_INSTALLED} -eq 0 ]]; then
 		# Set PHP FPM to listen on TCP instead of Socket
 		sudo sed -i "s/listen =.*/listen = 127.0.0.1:9000/" /etc/php5/fpm/pool.d/www.conf
 		# Set PHP FPM allowed clients IP address

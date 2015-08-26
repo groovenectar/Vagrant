@@ -41,17 +41,34 @@ else
 	conf_path="$5"
 fi
 
+if [[ -z $6 ]]; then
+	vhost_conf_path=""
+else
+	vhost_conf_path="$6"
+fi
+
 # Install Nginx
 # -qq implies -y --force-yes
 sudo apt-get install -qq nginx || true
 
 # Turn off sendfile to be more compatible with Windows, which can't use NFS
-sudo sed -i 's/sendfile on;/sendfile off;/' /etc/nginx/nginx.conf
+# sudo sed -i 's/sendfile on;/sendfile off;/' /etc/nginx/nginx.conf
 
 # Set run-as user for PHP5-FPM processes to user/group "vagrant"
 # to avoid permission errors from apps writing to files
-sudo sed -i "s/user www-data;/user vagrant;/" /etc/nginx/nginx.conf
-sudo sed -i "s/# server_names_hash_bucket_size.*/server_names_hash_bucket_size 64;/" /etc/nginx/nginx.conf
+# sudo sed -i "s/user www-data;/user vagrant;/" /etc/nginx/nginx.conf
+# sudo sed -i "s/# server_names_hash_bucket_size.*/server_names_hash_bucket_size 64;/" /etc/nginx/nginx.conf
+if [[ ${conf_path} =~ '://' ]]; then
+	curl --silent -L ${conf_path} > nginx.conf
+	sudo mv -f nginx.conf /etc/nginx/nginx.conf
+else
+	sudo cp -f ${synced_folder}/${conf_path} /etc/nginx/nginx.conf
+fi
+
+# Up some values
+sudo printf "\nfastcgi_connect_timeout 65;" | sudo tee -a /etc/nginx/fastcgi_params
+sudo printf "\nfastcgi_send_timeout 7200;" | sudo tee -a /etc/nginx/fastcgi_params
+sudo printf "\nfastcgi_read_timeout 7200;" | sudo tee -a /etc/nginx/fastcgi_params
 
 # Add vagrant user to www-data group
 sudo usermod -a -G www-data vagrant
@@ -62,11 +79,11 @@ sudo rm -f /etc/nginx/sites-enabled/default
 
 # Add new site
 if [[ ! -f /etc/nginx/sites-avaialable/${hostname} ]]; then
-	if [[ ${conf_path} =~ '://' ]]; then
-		curl --silent -L ${conf_path} > vhost.conf
-		sudo mv vhost.conf /etc/nginx/sites-available/${hostname}
+	if [[ ${vhost_conf_path} =~ '://' ]]; then
+		curl --silent -L ${vhost_conf_path} > vhost.conf
+		sudo mv -f vhost.conf /etc/nginx/sites-available/${hostname}
 	else
-		sudo cp ${synced_folder}/${conf_path} /etc/nginx/sites-available/${hostname}
+		sudo cp -f ${synced_folder}/${vhost_conf_path} /etc/nginx/sites-available/${hostname}
 	fi
 
 	sudo sed -i "s#localhost#${hostname}#g" /etc/nginx/sites-available/${hostname}
