@@ -72,8 +72,6 @@ sudo apt-get install -qq mysql-server mysql-client
 if [[ -n ${database_name} ]]; then
 	echo ">>> Create new database"
 	echo "CREATE DATABASE IF NOT EXISTS ${database_name};" | mysql -uroot -p"${mysql_root_password}"
-	echo "${mysql_root_password}"
-	echo "mysql -uroot -p\"${mysql_root_password}\""
 	if [[ "${database_user}" != 'root' ]]; then
 		# This creates the user if not exists
 		echo "GRANT ALL PRIVILEGES ON ${database_name}.* TO '${database_user}'@'localhost' IDENTIFIED BY '${database_pass}';" | mysql -uroot -p"${mysql_root_password}"
