@@ -1,7 +1,7 @@
 This project is deeply inspired by Vaprobash: https://github.com/fideloper/Vaprobash
 and Wes Roberts (@jchook)
 
-	$ wget -O Vagrantfile https://goo.gl/OYzBFy && wget -O provision.sh https://goo.gl/Ktv03C && wget -O hostfile.sh https://goo.gl/HTNNJi
+	$ curl -L https://goo.gl/OYzBFy > Vagrantfile && curl -L https://goo.gl/Ktv03C > provision.sh && curl -L https://goo.gl/HTNNJi > hostfile.sh
 	
 Edit `Vagrantfile` to fit project requirements
 
