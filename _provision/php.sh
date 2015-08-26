@@ -8,6 +8,14 @@ PHP_TIMEZONE=$1
 HHVM=$2
 PHP_VERSION=$3
 
+# Test if Apache is installed
+sudo apachectl -v > /dev/null 2>&1
+APACHE_IS_INSTALLED=$?
+
+# Test if Nginc is installed
+sudo nginx -v > /dev/null 2>&1
+NGINX_IS_INSTALLED=$?
+
 if [[ $HHVM == "true" ]]; then
 	echo ">>> Installing HHVM"
 
@@ -32,22 +40,40 @@ if [[ $HHVM == "true" ]]; then
 else
 	echo ">>> Installing PHP"
 
-	sudo apt-get install -qq php5 php5-cli php5-fpm php5-mysql php5-curl php5-gd php5-gmp php5-mcrypt php5-memcached php5-imagick php5-intl php5-xdebug
+	sudo apt-get install -qq php5 php5-common php5-cli php5-fpm php5-mysql php5-curl php5-gd php5-gmp php5-mcrypt php5-memcached php5-imagick php5-intl php5-xdebug
 
-	# Set PHP FPM to listen on TCP instead of Socket
-	# sudo sed -i "s/listen =.*/listen = 127.0.0.1:9000/" /etc/php5/fpm/pool.d/www.conf
+	# Using PHP-FPM for Nginx
+	if [ ${NGINX_IS_INSTALLED} -eq 0 ]; then
+		# Set PHP FPM to listen on TCP instead of Socket
+		sudo sed -i "s/listen =.*/listen = 127.0.0.1:9000/" /etc/php5/fpm/pool.d/www.conf
+		# Set PHP FPM allowed clients IP address
+		sudo sed -i "s/;listen.allowed_clients/listen.allowed_clients/" /etc/php5/fpm/pool.d/www.conf
+	fi
 
-	# Set PHP FPM allowed clients IP address
-	sudo sed -i "s/;listen.allowed_clients/listen.allowed_clients/" /etc/php5/fpm/pool.d/www.conf
+	# If PHP is installed or HHVM is installed, proxy PHP requests to it
+	if [[ $APACHE_IS_INSTALLED -eq 0 ]]; then
+		# PHP Config for Apache
+		sudo apt-get install -qq libapache2-mod-php5
+		# Should auto-enable
+		# sudo a2enmod libapache2-mod-php5
+	fi
 
 	# Set run-as user for PHP5-FPM processes to user/group "vagrant"
 	# to avoid permission errors from apps writing to files
 	sudo sed -i "s/user = www-data/user = vagrant/" /etc/php5/fpm/pool.d/www.conf
 	sudo sed -i "s/group = www-data/group = vagrant/" /etc/php5/fpm/pool.d/www.conf
-
 	sudo sed -i "s/listen\.owner.*/listen.owner = vagrant/" /etc/php5/fpm/pool.d/www.conf
 	sudo sed -i "s/listen\.group.*/listen.group = vagrant/" /etc/php5/fpm/pool.d/www.conf
 	sudo sed -i "s/listen\.mode.*/listen.mode = 0666/" /etc/php5/fpm/pool.d/www.conf
+
+	# Up some limits
+	sudo sed -i "s/max_execution_time = .*/max_execution_time = 180/" /etc/php5/fpm/php.ini
+	sudo sed -i "s/memory_limit = .*/memory_limit = 256M/" /etc/php5/fpm/php.ini
+	sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 20M/" /etc/php5/fpm/php.ini
+	sudo sed -i "s/post_max_size = .*/post_max_size = 20M/" /etc/php5/fpm/php.ini
+
+	sudo sed -i "s/max_execution_time = .*/max_execution_time = 180/" /etc/php5/cli/php.ini
+	sudo sed -i "s/memory_limit = .*/memory_limit = 256M/" /etc/php5/cli/php.ini
 
 	# xdebug Config
 	cat > $(find /etc/php5 -name xdebug.ini) << EOF

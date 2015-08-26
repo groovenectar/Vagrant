@@ -32,8 +32,13 @@ fi
 if [[ -z $4 ]]; then
 	hostname=""
 else
-	# There is a space, because this will be suffixed
 	hostname="$4"
+fi
+
+if [[ -z $5 ]]; then
+	conf_path=""
+else
+	conf_path="$5"
 fi
 
 # Install Nginx
@@ -51,24 +56,27 @@ sudo sed -i "s/# server_names_hash_bucket_size.*/server_names_hash_bucket_size 6
 # Add vagrant user to www-data group
 sudo usermod -a -G www-data vagrant
 
-# Delete default site
+# Disable default site
 sudo rm -f /etc/nginx/sites-enabled/default
-sudo rm -f /etc/nginx/sites-available/default
-sudo rm -rf /var/www/html
+# sudo rm -rf /var/www/html
 
 # Add new site
 if [[ ! -f /etc/nginx/sites-avaialable/${hostname} ]]; then
-	sudo cp ${synced_folder}/_provision/nginx.conf /etc/nginx/sites-available/${hostname}
+	if [[ ${conf_path} =~ '://' ]]; then
+		curl --silent -L ${conf_path} > vhost.conf
+		sudo mv vhost.conf /etc/nginx/sites-available/${hostname}
+	else
+		sudo cp ${synced_folder}/${conf_path} /etc/nginx/sites-available/${hostname}
+	fi
+
+	sudo sed -i "s#localhost#${hostname}#g" /etc/nginx/sites-available/${hostname}
+	sudo sed -i "s#/var/www/html/\?#${public_folder}#g" /etc/nginx/sites-available/${hostname}
 	sudo ln -sf /etc/nginx/sites-available/${hostname} /etc/nginx/sites-enabled/${hostname}
 fi
-
-sudo sed -i "s#localhost#${hostname}#g" /etc/nginx/sites-available/${hostname}
-sudo sed -i "s#/var/www/html/\?#${public_folder//\//\\\/}#g" /etc/nginx/sites-available/${hostname}
 
 if [[ $HHVM_IS_INSTALLED -ne 0 && $PHP_IS_INSTALLED -eq 0 ]]; then
 	# PHP-FPM Config for Nginx
 	sudo sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
-
 	sudo service php5-fpm restart
 fi
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo ">>> Extra provisioning"
+echo ">>> Additional provisioning"
 
 # Get variables from Vagrantfile
 if [[ -z $1 ]]; then
@@ -21,12 +21,40 @@ else
 	synced_folder="$3"
 fi
 
-if [[ -z $4 ]]; then
-	hostname=""
-else
-	# There is a space, because this will be suffixed
-	hostname=" $4"
+if [[ ! -z $4 ]]; then
+	hostname="$4"
 fi
 
-# MySQL database
-# echo "CREATE DATABASE IF NOT EXISTS blog;" | mysql -uroot
+if [[ ! -z $5 ]]; then
+	mysql_root_password="$5"
+fi
+
+if [[ ! -z $6 ]]; then
+	database_name="$6"
+fi
+
+if [[ ! -z $7 ]]; then
+	database_user="$7"
+fi
+
+if [[ ! -z $8 ]]; then
+	database_pass="$8"
+fi
+
+echo ">>> Installing Ngrok"
+sudo apt-get install -qq ngrok-client
+
+cd ${public_folder}
+
+# echo ">>> Checking out develop branch"
+# git checkout develop
+
+# echo ">>> Installing Composer dependencies"
+# composer install
+
+# echo ">>> Running Laravel Migrations"
+# php artisan migrate
+# php artisan db:seed
+
+# echo ">>> NodeJS"
+# npm install && bower install && gulp

@@ -2,20 +2,29 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
-echo "Setting Timezone & Locale to $2 & C.UTF-8"
+echo ">>> Setting Timezone & Locale to $2 & C.UTF-8"
 sudo timedatectl set-timezone $2
 
-# Update
+# Try to supress (harmless message): dpkg-preconfigure: unable to re-open stdin: No such file or directory
+# This does not work on Debian
+# export LANGUAGE=en_US.UTF-8
+# export LANG=en_US.UTF-8
+# export LC_ALL=en_US.UTF-8
+# locale-gen en_US.UTF-8
+# dpkg-reconfigure locales
+
+echo ">>> Update packages"
 sudo apt-get update
+# sudo apt-get upgrade
 
 # Install base packages
 # -qq implies -y --force-yes
 sudo apt-get install -qq curl unzip git-core ack-grep software-properties-common build-essential
 
 # Disable case sensitivity
-sudo shopt -s nocasematch
+shopt -s nocasematch
 
-if [[ ! -z $1 && ! $1 =~ false && $1 =~ ^[0-9]*$ ]]; then
+if [[ ! -f /swapfile && ! -z $1 && ! $1 =~ false && $1 =~ ^[0-9]*$ ]]; then
 	echo ">>> Setting up Swap ($1 MB)"
 
 	# Create the Swap file
@@ -40,9 +49,9 @@ if [[ ! -z $1 && ! $1 =~ false && $1 =~ ^[0-9]*$ ]]; then
 fi
 
 # Enable case sensitivity
-sudo shopt -u nocasematch
+shopt -u nocasematch
 
-echo ">>> Setting up ll alias"
+echo ">>> Setting up aliases"
 echo "alias ll='ls -la'" >> /home/vagrant/.bash_aliases
 echo "alias sudo='sudo '" >> /home/vagrant/.bash_aliases
 source /home/vagrant/.bash_aliases
