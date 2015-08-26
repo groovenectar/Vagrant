@@ -19,12 +19,12 @@ sudo timedatectl set-timezone $2
 # dpkg-reconfigure locales
 
 echo ">>> Updating packages"
-sudo apt-get update > /dev/null 2>&1
+sudo apt-get update
 # sudo apt-get upgrade
 
 # Install base packages
 # -qq implies -y --force-yes
-sudo apt-get install -qq curl unzip git-core ack-grep software-properties-common build-essential > /dev/null 2>&1
+sudo apt-get install -qq curl unzip git-core ack-grep software-properties-common build-essential
 
 # Disable case sensitivity
 shopt -s nocasematch

@@ -67,7 +67,7 @@ sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again p
 
 # Install MySQL Server
 # -qq implies -y --force-yes
-sudo apt-get install -qq mysql-server mysql-client > /dev/null 2>&1
+sudo apt-get install -qq mysql-server mysql-client
 
 if [[ -n ${database_name} ]]; then
 	echo ">>> Create new database"
