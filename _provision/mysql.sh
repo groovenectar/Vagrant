@@ -69,7 +69,7 @@ sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again p
 # -qq implies -y --force-yes
 sudo apt-get install -qq mysql-server mysql-client
 
-if [[ ! -z ${database_name} ]]; then
+if [[ -n ${database_name} ]]; then
 	echo ">>> Create new database"
 	echo "CREATE DATABASE IF NOT EXISTS ${database_name};" | mysql -uroot -p"${mysql_root_password}"
 	if [[ "${database_user}" != 'root' ]]; then
@@ -79,7 +79,7 @@ if [[ ! -z ${database_name} ]]; then
 	fi
 fi
 
-if [[ ! -z ${remote_database_ssh_user} ]]; then
+if [[ -n ${remote_database_ssh_user} ]]; then
 	# Can't prompt for SSH password during provision
 	# ssh "${remote_database_ssh_user}@${remote_database_ssh_host}" mysqldump --user="${remote_database_user}" --password="\"${remote_database_pass}\"" "${remote_database_name}" | mysql -uroot -p"${mysql_root_password}" "${database_name}"
 
@@ -112,7 +112,7 @@ if [[ ! -z ${remote_database_ssh_user} ]]; then
 fi
 
 # Make MySQL connectable from outside world without SSH tunnel
-if [ $2 == "true" ]; then
+if [ ${mysql_enable_remote} == "true" ]; then
 	# enable remote access
 	# setting the mysql bind-address to allow connections from everywhere
 	sed -i "s/bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
