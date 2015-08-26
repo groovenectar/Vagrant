@@ -144,12 +144,12 @@ Vagrant.configure("2") do |config|
 
 	# Provision Apache
 	if (webserver == 'apache')
-    	config.vm.provision "shell", path: script_path('apache.sh'), args: [server_ip, public_folder, synced_folder, hostname, script_path('apache.conf')]
+    	config.vm.provision "shell", path: script_path('apache.sh'), args: [server_ip, public_folder, synced_folder, hostname, script_path('vhost-apache.conf')]
     end
 
 	# Provision Nginx, using PHP-FPM
 	if (webserver == 'nginx')
-		config.vm.provision "shell", path: script_path('nginx.sh'), args: [server_ip, public_folder, synced_folder, hostname, script_path('nginx.conf')]
+		config.vm.provision "shell", path: script_path('nginx.sh'), args: [server_ip, public_folder, synced_folder, hostname, script_path('vhost-nginx.conf')]
 	end
 
 	# Provision MySQL
