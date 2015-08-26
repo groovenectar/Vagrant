@@ -66,13 +66,16 @@ else
 fi
 num_cores=$(grep processor /proc/cpuinfo | wc -l)
 ulimit=$(ulimit -n)
-worker_connections=(${num_cores} * ${ulimit})
+worker_connections=$((${num_cores}*${ulimit}))
 sudo sed -i "s/worker_processes.*/worker_processes ${num_cores};/" /etc/nginx/nginx.conf
 sudo sed -i "s/worker_connections.*/worker_connections ${worker_connections};/" /etc/nginx/nginx.conf
 
 # Up some values
+sudo sed -i "s#\n\?fastcgi_connect_timeout.*##g" /etc/nginx/fastcgi_params
 sudo printf "\nfastcgi_connect_timeout 65;" | sudo tee -a /etc/nginx/fastcgi_params
+sudo sed -i "s#\n\?fastcgi_send_timeout 7200;.*##g" /etc/nginx/fastcgi_params
 sudo printf "\nfastcgi_send_timeout 7200;" | sudo tee -a /etc/nginx/fastcgi_params
+sudo sed -i "s#\n\?fastcgi_read_timeout.*##g" /etc/nginx/fastcgi_params
 sudo printf "\nfastcgi_read_timeout 7200;" | sudo tee -a /etc/nginx/fastcgi_params
 
 # Add vagrant user to www-data group
