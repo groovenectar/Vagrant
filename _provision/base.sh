@@ -2,6 +2,11 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
+echo ">>> Setting up aliases"
+echo "alias ll='ls -la'" >> /home/vagrant/.bash_aliases
+echo "alias sudo='sudo '" >> /home/vagrant/.bash_aliases
+source /home/vagrant/.bash_aliases
+
 echo ">>> Setting Timezone & Locale to $2 & C.UTF-8"
 sudo timedatectl set-timezone $2
 
@@ -50,11 +55,6 @@ fi
 
 # Enable case sensitivity
 shopt -u nocasematch
-
-echo ">>> Setting up aliases"
-echo "alias ll='ls -la'" >> /home/vagrant/.bash_aliases
-echo "alias sudo='sudo '" >> /home/vagrant/.bash_aliases
-source /home/vagrant/.bash_aliases
 
 # echo ">>> Installing Screen"
 # -qq implies -y --force-yes

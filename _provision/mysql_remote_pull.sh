@@ -9,7 +9,9 @@ remote_database_name="${6}"
 remote_database_user="${7}"
 remote_database_pass="${8}"
 
-if [ -t 1 ] ; then
+# Only if in interactive shell
+# http://unix.stackexchange.com/a/26782/114856
+if [[ $- == *i* ]] ; then
 	echo
 	echo ">>> Importing remote database"
 	echo
