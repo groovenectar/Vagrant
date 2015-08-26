@@ -6,9 +6,9 @@ synced_folder = "/var/www/#{hostname}"
 public_folder = "/var/www/#{hostname}"
 
 # Create new MySQL database
-database_name = "vagrant" # Blank to skip
-database_user = "vagrant"
-database_pass = "vagrant" # Blank to prompt
+database_name = "" # Blank to skip
+database_user = ""
+database_pass = "" # Blank to prompt
 
 # Import a remote MySQL database
 # `vagrant ssh` to start import
@@ -22,14 +22,14 @@ remote_database_pass     = "" # Blank to prompt
 # 10.0.0.1    - 10.255.255.254
 # 172.16.0.1  - 172.31.255.254
 # 192.168.0.1 - 192.168.255.254
-server_ip     = "172.23.103.204" # Static IP
+server_ip     = "172.23.103.200" # Static IP
 # server_ip   = "172.#{Random.new.rand(16..31)}.#{Random.new.rand(0..255)}.#{Random.new.rand(1..254)}"
 
 # Magento < 1.9 needs PHP <= 5.5
-# vm_box = "debian/jessie64"  # Debian 8, PHP 5.6, MySQL 5.5
+vm_box = "debian/jessie64"  # Debian 8, PHP 5.6, MySQL 5.5
 # vm_box = "debian/wheezy64"  # Debian 7, PHP 5.4, MySQL 5.5
 # vm_box = "ubuntu/vivid64"   # Ubuntu 15.04, PHP 5.6, MySQL 5.5
-vm_box = "ubuntu/trusty64"  # Ubuntu 14.04, PHP 5.5, MySQL 5.5
+# vm_box = "ubuntu/trusty64"  # Ubuntu 14.04, PHP 5.5, MySQL 5.5
 # vm_box = "ubuntu/precise64" # Ubuntu 12.04, PHP 5.3, MySQL 5.5
 
 webserver = "nginx" # ["nginx"|"apache"|"none"]
