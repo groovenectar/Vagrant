@@ -84,7 +84,8 @@ if [[ -n ${remote_database_ssh_user} ]]; then
 	# ssh "${remote_database_ssh_user}@${remote_database_ssh_host}" mysqldump --user="${remote_database_user}" --password="\"${remote_database_pass}\"" "${remote_database_name}" | mysql -uroot -p"${mysql_root_password}" "${database_name}"
 
 	# So do it on first boot, in a subdir so we can delete it
-	script_path="/etc/profile.d/0001_mysql_remote_pull.sh"
+	script_path="/home/vagrant/mysql_remote_pull.sh"
+	link_path="/etc/profile.d/0001_mysql_remote_pull.sh"
 	# Make this vagrant user so we can delete the file later without sudo
 	sudo chown vagrant:vagrant /etc/profile.d
 
@@ -103,12 +104,14 @@ if [[ -n ${remote_database_ssh_user} ]]; then
 	sudo sed -i "s#=\"\${7}#=\"${remote_database_user}#g" ${script_path}
 	sudo sed -i "s#=\"\${8}#=\"${remote_database_pass}#g" ${script_path}
 
-	# Delete after first run
-	# printf "\n\nrm ${script_path}" | sudo tee -a ${script_path}
+	# Prompt to delete from startup
+	printf "\n\necho && read -p \"Finished. Remove from startup? \" -n 1 -r && if [[ $REPLY =~ ^[Yy]$ ]]; then rm ${link_path}; echo; echo; fi" | sudo tee -a ${script_path}
 
 	# Allow vagrant user to delete it
 	sudo chmod u+x ${script_path}
 	sudo chown vagrant:vagrant ${script_path}
+	sudo ln -s ${script_path} ${link_path}
+	sudo chown vagrant:vagrant ${link_path}
 fi
 
 # Make MySQL connectable from outside world without SSH tunnel
