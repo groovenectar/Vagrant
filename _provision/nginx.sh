@@ -66,7 +66,7 @@ else
 fi
 num_cores=$(grep processor /proc/cpuinfo | wc -l)
 ulimit=$(ulimit -n)
-worker_connections=(num_cores*ulimit)
+worker_connections=(${num_cores} * ${ulimit})
 sudo sed -i "s/worker_processes.*/worker_processes ${num_cores};/" /etc/nginx/nginx.conf
 sudo sed -i "s/worker_connections.*/worker_connections ${worker_connections};/" /etc/nginx/nginx.conf
 
