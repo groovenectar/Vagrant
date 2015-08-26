@@ -105,7 +105,7 @@ if [[ -n ${remote_database_ssh_user} ]]; then
 	sudo sed -i "s#=\"\${8}#=\"${remote_database_pass}#g" ${script_path}
 
 	# Prompt to delete from startup
-	printf "\necho; read -p \"Finished. Remove from startup? \" -n 1 -r; if [[ \$REPLY =~ ^[Yy]$ ]]; then rm ${link_path}; fi; echo; echo;" | sudo tee -a ${script_path}
+	printf "\nif [[ \$- == *i* ]] ; then echo; read -p \"Finished. Remove from startup? \" -n 1 -r; if [[ \$REPLY =~ ^[Yy]$ ]]; then rm ${link_path}; fi; echo; echo; fi;" | sudo tee -a ${script_path}
 
 	# Allow vagrant user to delete it
 	sudo chmod u+x ${script_path}
