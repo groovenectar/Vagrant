@@ -3,7 +3,7 @@
 
 hostname = "vagrant.dev"
 synced_folder = "/var/www/#{hostname}"
-public_folder = "/var/www/#{hostname}"
+public_folder = "/var/www/#{hostname}/public"
 
 # Create new MySQL database
 database_name = "" # Blank to skip
