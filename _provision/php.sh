@@ -71,6 +71,7 @@ xdebug.show_local_vars=1
 xdebug.var_display_max_depth = 5
 xdebug.var_display_max_children = 256
 xdebug.var_display_max_data = 1024
+xdebug.max_nesting_level = 350
 EOF
 
 	# PHP Error Reporting Config
