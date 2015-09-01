@@ -139,8 +139,8 @@ Vagrant.configure("2") do |config|
 	end
 
 	# Base scripts
-	config.vm.provision "shell", path: script_path('base.sh'), args: [server_swap, server_timezone]
-	config.vm.provision "shell", path: script_path('base_privileged.sh'), privileged: true
+	config.vm.provision "shell", path: script_path('base.sh'), args: [server_swap, server_timezone, synced_folder, public_folder]
+	config.vm.provision "shell", path: script_path('base_privileged.sh'), args: [server_swap, server_timezone, synced_folder, public_folder], privileged: true
 
 	# Provision Apache
 	if (webserver == 'apache')

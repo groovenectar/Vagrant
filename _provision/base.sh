@@ -2,6 +2,9 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
+synced_folder=${3}
+public_folder=${4}
+
 echo ">>> Setting up aliases"
 echo "alias ll='ls -la'" >> /home/vagrant/.bash_aliases
 echo "alias sudo='sudo '" >> /home/vagrant/.bash_aliases
@@ -25,6 +28,9 @@ sudo apt-get update || true
 # Install base packages
 # -qq implies -y --force-yes
 sudo apt-get install -qq curl unzip git-core ack-grep software-properties-common build-essential || true
+
+echo ">>> Updating login directory"
+sudo printf "\ncd ${synced_folder}\n" | sudo tee -a /home/vagrant/.bashrc
 
 # Disable case sensitivity
 shopt -s nocasematch
