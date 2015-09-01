@@ -3,7 +3,7 @@
 
 hostname = "vagrant.dev"
 synced_folder = "/var/www/#{hostname}"
-public_folder = "/var/www/#{hostname}"
+public_folder = "/var/www/#{hostname}/public"
 
 # Create new MySQL database
 database_name = "" # Blank to skip
@@ -48,8 +48,8 @@ mysql_enable_remote = "false" # remote access enabled when true
 # To install HHVM instead of PHP, set this to "true"
 hhvm = "false"
 
-# first_run = Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/#{hostname}/*").empty?
-if (ARGV[0] == 'up' || ARGV[0] == 'provision')
+first_run = Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/#{hostname}/*").empty?
+if (first_run && (ARGV[0] == 'up' || ARGV[0] == 'provision'))
 	print "Edit Vagrantfile to update hostname and IP"
 	print "\n\nProvisioning with hostname \"" + hostname + "\" and IP " + server_ip
 	print "\n\nContinue? [y/n]"
@@ -65,17 +65,17 @@ if (ARGV[0] == 'up' || ARGV[0] == 'provision')
 	end
 end
 
-if ((ARGV[0] == 'up' || ARGV[0] == 'provision') && mysql_root_password == '')
+if (first_run && (ARGV[0] == 'up' || ARGV[0] == 'provision') && mysql_root_password == '')
 	print "\nEnter MySQL root password: "
 	mysql_root_password = STDIN.noecho(&:gets).chomp
 end
 
-if ((ARGV[0] == 'up' || ARGV[0] == 'provision') && database_name != '' && database_pass == '')
+if (first_run && (ARGV[0] == 'up' || ARGV[0] == 'provision') && database_name != '' && database_pass == '')
 	print "\nEnter new MySQL database password: "
 	database_pass = STDIN.noecho(&:gets).chomp
 end
 
-if ((ARGV[0] == 'up' || ARGV[0] == 'provision') && remote_database_ssh_user != '' && remote_database_pass == '')
+if (first_run && (ARGV[0] == 'up' || ARGV[0] == 'provision') && remote_database_ssh_user != '' && remote_database_pass == '')
 	# print "\nEnter remote MySQL database password: "
 	# remote_database_pass = STDIN.noecho(&:gets).chomp
 	print "\nYou will be prompted for remote database connection information on first `vagrant ssh` session.\n"

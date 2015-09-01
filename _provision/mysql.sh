@@ -82,8 +82,7 @@ fi
 if [[ -n ${remote_database_ssh_user} ]]; then
 	# Can't prompt for SSH password during provision
 	# ssh "${remote_database_ssh_user}@${remote_database_ssh_host}" mysqldump --single-transaction --user="${remote_database_user}" --password="\"${remote_database_pass}\"" "${remote_database_name}" | mysql -uroot -p"${mysql_root_password}" "${database_name}"
-
-	# So do it on first boot, in a subdir so we can delete it
+	# So do it on first boot
 	script_path="/home/vagrant/mysql_remote_pull.sh"
 	link_path="/etc/profile.d/0001_mysql_remote_pull.sh"
 	# Make this vagrant user so we can delete the file later without sudo
