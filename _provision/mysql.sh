@@ -49,6 +49,10 @@ if [[ -n ${12} ]]; then
 	mysql_remote_pull_script="${12}"
 fi
 
+if [[ -n ${13} ]]; then
+	mysql_version="${13}"
+fi
+
 # Install MySQL without password prompt
 # Set username and password to 'root'
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password $1"
@@ -56,10 +60,10 @@ sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again p
 
 # Install MySQL Server
 # -qq implies -y --force-yes
-if [ ${mysql_version} == "5.6" ]; then
-	sudo apt-get install -qq mysql-server-5.6 mysql-client-5.6 || true
-else
+if [ ${mysql_version} == "5.5" ]; then
 	sudo apt-get install -qq mysql-server-5.5 mysql-client-5.5 || true
+else
+	sudo apt-get install -qq mysql-server-5.6 mysql-client-5.6 || true
 fi
 
 
