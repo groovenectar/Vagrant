@@ -3,12 +3,15 @@
 database_name="${1}"
 database_user="${2}"
 database_pass="${3}"
-remote_database_ssh_user="${4}"
-remote_database_ssh_host="${5}"
-remote_database_name="${6}"
-remote_database_user="${7}"
-remote_database_pass="${8}"
-magento="${9}"
+database_prefix="${4}"
+remote_database_ssh_user="${5}"
+remote_database_ssh_host="${6}"
+remote_database_name="${7}"
+remote_database_user="${8}"
+remote_database_pass="${9}"
+http_url="${10}"
+https_url="${11}"
+magento="${12}"
 
 # Only if in interactive shell
 # http://unix.stackexchange.com/a/26782/114856
@@ -20,8 +23,8 @@ if [[ $- == *i* ]] ; then
 		# Set the hostname in config
 		# Run on first `vagrant ssh` then delete the script
 		script="#!/usr/bin/env bash
-		mysql --user=\"${database_user}\" --password=\"${database_pass}\" -e 'UPDATE \`${database_name}\`.\`${database_table_prefix}core_config_data\` SET value = \"${http_url}\" WHERE path = \"web/unsecure/base_url\"' \"${database_name}\"
-		mysql --user=\"${database_user}\" --password=\"${database_pass}\" -e 'UPDATE \`${database_name}\`.\`${database_table_prefix}core_config_data\` SET value = \"${https_url}\" WHERE path = \"web/secure/base_url\"' \"${database_name}\"
+		mysql --user=\"${database_user}\" --password=\"${database_pass}\" -e 'UPDATE \`${database_name}\`.\`${database_prefix}core_config_data\` SET value = \"${http_url}\" WHERE path = \"web/unsecure/base_url\"' \"${database_name}\"
+		mysql --user=\"${database_user}\" --password=\"${database_pass}\" -e 'UPDATE \`${database_name}\`.\`${database_prefix}core_config_data\` SET value = \"${https_url}\" WHERE path = \"web/secure/base_url\"' \"${database_name}\"
 		rm /etc/profile.d/9999_magento_mysql.sh"
 		sudo echo "${script}" | sudo tee -a /etc/profile.d/9999_magento_mysql.sh
 		sudo chmod u+x /etc/profile.d/9999_magento_mysql.sh
@@ -31,14 +34,14 @@ if [[ $- == *i* ]] ; then
 		ignore_tables_array=( adminnotification_inbox dataflow_batch_export dataflow_batch_import log_customer log_quote log_summary log_summary_type log_url log_url_info log_visitor log_visitor_info log_visitor_online index_event report_event report_viewed_product_index report_compared_product_index catalog_compare_item )
 		for table in "${ignore_tables_array[@]}"
 		do
-			ignore_tables+="--ignore-table=${dbname[remote]}.${dbprefix[remote]}${table} "
+			ignore_tables+="--ignore-table=${database_name}.${database_prefix}${table} "
 		done
 		target_path="/home/vagrant/mysql_remote_pull.sh"
 		sudo sed -i "s/--single-transaction/--single-transaction ${ignore_tables}/" target_path
-		table_structures=${dbname[remote]}
+		table_structures=${database_name}
 		for table in "${ignore_tables_array[@]}"
 		do
-			table_structures+=" ${dbprefix[remote]}${table}"
+			table_structures+=" ${database_prefix}${table}"
 		done
 	fi
 
