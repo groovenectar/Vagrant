@@ -49,17 +49,6 @@ if [[ -n ${12} ]]; then
 	mysql_remote_pull_script="${12}"
 fi
 
-# if [ ${mysql_version} == "5.6" ]; then
-# 	# Add repo for MySQL 5.6
-# 	# Need to revisit this if 5.6 is desired, this route does not seem to work
-# 	wget http://repo.mysql.com/mysql-apt-config_0.3.6-1debian8_all.deb
-# 	sudo debconf-set-selections <<< "mysql-apt-config mysql-apt-config/enable-repo select mysql-5.6"
-# 	sudo dpkg -i mysql-apt-config_0.3.6-1debian8_all.deb
-#
-# 	# Update Again
-# 	sudo apt-get update
-# fi
-
 # Install MySQL without password prompt
 # Set username and password to 'root'
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password $1"
@@ -67,7 +56,12 @@ sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again p
 
 # Install MySQL Server
 # -qq implies -y --force-yes
-sudo apt-get install -qq mysql-server mysql-client || true
+if [ ${mysql_version} == "5.6" ]; then
+	sudo apt-get install -qq mysql-server-5.6 mysql-client-5.6 || true
+else
+	sudo apt-get install -qq mysql-server-5.5 mysql-client-5.5 || true
+fi
+
 
 if [[ -n ${database_name} ]]; then
 	echo ">>> Create new database"
