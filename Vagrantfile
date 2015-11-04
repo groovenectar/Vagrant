@@ -5,22 +5,27 @@ hostname = "vagrant.dev"
 synced_folder = "/var/www/#{hostname}"
 public_folder = "/var/www/#{hostname}/public"
 
+local_http_url="http://${hostname}/"
+local_https_url="http://${hostname}/"
+
 magento="false"
 wordpress="false"
 laravel="false"
 
 # Create new MySQL database
-database_name = "" # Blank to skip
-database_user = ""
-database_pass = "" # Blank to prompt
+database_name         = "" # Blank to skip
+database_user         = ""
+database_pass         = "" # Blank to prompt
+database_table_prefix = ""
 
 # Import a remote MySQL database
 # `vagrant ssh` to start import
-remote_database_ssh_user = "" # Blank to skip
-remote_database_ssh_host = ""
-remote_database_name     = ""
-remote_database_user     = ""
-remote_database_pass     = "" # Blank to prompt
+remote_database_ssh_user     = "" # Blank to skip
+remote_database_ssh_host     = ""
+remote_database_name         = ""
+remote_database_user         = ""
+remote_database_pass         = "" # Blank to prompt
+remote_database_table_prefix = ""
 
 # http://en.wikipedia.org/wiki/Private_network
 # 10.0.0.1    - 10.255.255.254
@@ -164,14 +169,20 @@ Vagrant.configure("2") do |config|
 		database_name,
 		database_user,
 		database_pass,
+		database_table_prefix,
 		remote_database_ssh_user,
 		remote_database_ssh_host,
 		remote_database_name,
 		remote_database_user,
 		remote_database_pass,
+		remote_database_table_prefix,
 		synced_folder,
+		local_http_url,
+		local_https_url,
 		script_path('mysql_remote_pull.sh'),
 		mysql_version,
+		local_http_url,
+		local_https_url,
 		magento,
 		wordpress
 	]
