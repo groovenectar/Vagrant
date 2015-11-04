@@ -5,6 +5,10 @@ hostname = "vagrant.dev"
 synced_folder = "/var/www/#{hostname}"
 public_folder = "/var/www/#{hostname}/public"
 
+magento="false"
+wordpress="false"
+laravel="false"
+
 # Create new MySQL database
 database_name = "" # Blank to skip
 database_user = ""
@@ -167,7 +171,9 @@ Vagrant.configure("2") do |config|
 		remote_database_pass,
 		synced_folder,
 		script_path('mysql_remote_pull.sh'),
-		mysql_version
+		mysql_version,
+		magento,
+		wordpress
 	]
 
 	# Provision PHP
