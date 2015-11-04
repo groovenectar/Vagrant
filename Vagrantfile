@@ -5,8 +5,8 @@ hostname = "vagrant.dev"
 synced_folder = "/var/www/#{hostname}"
 public_folder = "/var/www/#{hostname}/public"
 
-local_http_url="http://${hostname}/"
-local_https_url="http://${hostname}/"
+local_http_url="http://#{hostname}/"
+local_https_url="http://#{hostname}/"
 
 magento="false"
 wordpress="false"
