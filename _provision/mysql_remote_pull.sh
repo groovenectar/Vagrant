@@ -58,7 +58,7 @@ if [[ $- == *i* ]] ; then
 	fi
 
 	if [ ${magento} == "true" ]; then
-		mysql --user="${database_user}" --password="${database_pass}" -e 'UPDATE `${database_name}`.`${database_table_prefix}core_config_data` SET value = "${local_http_url}" WHERE path = "web/unsecure/base_url"' "${database_name}"
-		mysql --user="${database_user}" --password="${database_pass}" -e 'UPDATE `${database_name}`.`${database_table_prefix}core_config_data` SET value = "${local_https_url}" WHERE path = "web/secure/base_url"' "${database_name}"
+		mysql --user="${database_user}" --password="${database_pass}" -e 'UPDATE `'"${database_name}"'`.`'"${database_table_prefix}"'core_config_data` SET value = "'"${local_http_url}"'" WHERE path = "web/unsecure/base_url"' "${database_name}"
+		mysql --user="${database_user}" --password="${database_pass}" -e 'UPDATE `'"${database_name}"'`.`'"${database_table_prefix}"'core_config_data` SET value = "'"${local_https_url}"'" WHERE path = "web/secure/base_url"' "${database_name}"
 	fi
 fi
