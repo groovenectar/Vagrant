@@ -23,7 +23,7 @@ sudo timedatectl set-timezone $2 || true
 
 echo ">>> Updating packages"
 sudo apt-get update || true
-# sudo apt-get upgrade
+sudo apt-get upgrade || true
 
 # Install base packages
 # -qq implies -y --force-yes
