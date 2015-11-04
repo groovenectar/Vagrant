@@ -53,6 +53,14 @@ if [[ -n ${13} ]]; then
 	mysql_version="${13}"
 fi
 
+if [[ -n ${14} ]]; then
+	magento="${14}"
+fi
+
+if [[ -n ${15} ]]; then
+	magento="${15}"
+fi
+
 # Install MySQL without password prompt
 # Set username and password to 'root'
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password $1"
@@ -100,6 +108,7 @@ if [[ -n ${remote_database_ssh_user} ]]; then
 	sudo sed -i "s#=\"\${6}#=\"${remote_database_name}#g" ${script_path}
 	sudo sed -i "s#=\"\${7}#=\"${remote_database_user}#g" ${script_path}
 	sudo sed -i "s#=\"\${8}#=\"${remote_database_pass}#g" ${script_path}
+	sudo sed -i "s#=\"\${9}#=\"${magento}#g" ${script_path}
 
 	# Prompt to delete from startup
 	printf "\nif [[ \$- == *i* ]] ; then echo; read -p \"Finished. Remove from startup? \" -n 1 -r; if [[ \$REPLY =~ ^[Yy]$ ]]; then rm ${link_path}; fi; echo; echo; fi;" | sudo tee -a ${script_path}
