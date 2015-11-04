@@ -58,7 +58,7 @@ if [[ -n ${14} ]]; then
 fi
 
 if [[ -n ${15} ]]; then
-	magento="${15}"
+	wordpress="${15}"
 fi
 
 # Install MySQL without password prompt
