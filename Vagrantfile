@@ -44,6 +44,7 @@ php_timezone    = "UTC"    # http://php.net/manual/en/timezones.php
 # Database Configuration
 mysql_root_password = "root"  # Blank to prompt
 mysql_enable_remote = "false" # remote access enabled when true
+mysql_version       = "5.6"   # ["5.5"|"5.6"]
 
 # To install HHVM instead of PHP, set this to "true"
 hhvm = "false"
@@ -165,7 +166,8 @@ Vagrant.configure("2") do |config|
 		remote_database_user,
 		remote_database_pass,
 		synced_folder,
-		script_path('mysql_remote_pull.sh')
+		script_path('mysql_remote_pull.sh'),
+		mysql_version
 	]
 
 	# Provision PHP
