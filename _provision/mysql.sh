@@ -22,43 +22,55 @@ if [[ -n ${5} ]]; then
 fi
 
 if [[ -n ${6} ]]; then
-	remote_database_ssh_user="${6}"
+	database_prefix="${6}"
 fi
 
 if [[ -n ${7} ]]; then
-	remote_database_ssh_host="${7}"
+	remote_database_ssh_user="${7}"
 fi
 
 if [[ -n ${8} ]]; then
-	remote_database_name="${8}"
+	remote_database_ssh_host="${8}"
 fi
 
 if [[ -n ${9} ]]; then
-	remote_database_user="${9}"
+	remote_database_name="${9}"
 fi
 
 if [[ -n ${10} ]]; then
-	remote_database_pass="${10}"
+	remote_database_user="${10}"
 fi
 
 if [[ -n ${11} ]]; then
-	synced_folder="${11}"
+	remote_database_pass="${11}"
 fi
 
 if [[ -n ${12} ]]; then
-	mysql_remote_pull_script="${12}"
+	synced_folder="${12}"
 fi
 
 if [[ -n ${13} ]]; then
-	mysql_version="${13}"
+	mysql_remote_pull_script="${13}"
 fi
 
 if [[ -n ${14} ]]; then
-	magento="${14}"
+	mysql_version="${14}"
 fi
 
 if [[ -n ${15} ]]; then
-	wordpress="${15}"
+	http_url="${15}"
+fi
+
+if [[ -n ${16} ]]; then
+	https_url="${16}"
+fi
+
+if [[ -n ${17} ]]; then
+	magento="${17}"
+fi
+
+if [[ -n ${18} ]]; then
+	wordpress="${18}"
 fi
 
 # Install MySQL without password prompt
@@ -103,12 +115,15 @@ if [[ -n ${remote_database_ssh_user} ]]; then
 	sudo sed -i "s#=\"\${1}#=\"${database_name}#g" ${script_path}
 	sudo sed -i "s#=\"\${2}#=\"${database_user}#g" ${script_path}
 	sudo sed -i "s#=\"\${3}#=\"${database_pass}#g" ${script_path}
-	sudo sed -i "s#=\"\${4}#=\"${remote_database_ssh_user}#g" ${script_path}
-	sudo sed -i "s#=\"\${5}#=\"${remote_database_ssh_host}#g" ${script_path}
-	sudo sed -i "s#=\"\${6}#=\"${remote_database_name}#g" ${script_path}
-	sudo sed -i "s#=\"\${7}#=\"${remote_database_user}#g" ${script_path}
-	sudo sed -i "s#=\"\${8}#=\"${remote_database_pass}#g" ${script_path}
-	sudo sed -i "s#=\"\${9}#=\"${magento}#g" ${script_path}
+	sudo sed -i "s#=\"\${4}#=\"${database_prefix}#g" ${script_path}
+	sudo sed -i "s#=\"\${5}#=\"${remote_database_ssh_user}#g" ${script_path}
+	sudo sed -i "s#=\"\${6}#=\"${remote_database_ssh_host}#g" ${script_path}
+	sudo sed -i "s#=\"\${7}#=\"${remote_database_name}#g" ${script_path}
+	sudo sed -i "s#=\"\${8}#=\"${remote_database_user}#g" ${script_path}
+	sudo sed -i "s#=\"\${9}#=\"${remote_database_pass}#g" ${script_path}
+	sudo sed -i "s#=\"\${10}#=\"${http_url}#g" ${script_path}
+	sudo sed -i "s#=\"\${11}#=\"${https_url}#g" ${script_path}
+	sudo sed -i "s#=\"\${12}#=\"${magento}#g" ${script_path}
 
 	# Prompt to delete from startup
 	printf "\nif [[ \$- == *i* ]] ; then echo; read -p \"Finished. Remove from startup? \" -n 1 -r; if [[ \$REPLY =~ ^[Yy]$ ]]; then rm ${link_path}; fi; echo; echo; fi;" | sudo tee -a ${script_path}
