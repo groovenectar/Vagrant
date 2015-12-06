@@ -3,7 +3,7 @@
 
 hostname = "vagrant.dev"
 synced_folder = "/var/www/#{hostname}"
-public_folder = "/var/www/#{hostname}/www"
+public_folder = "/var/www/#{hostname}/htdocs"
 
 local_http_url="http://#{hostname}/"
 local_https_url="http://#{hostname}/"
