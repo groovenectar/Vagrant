@@ -55,7 +55,7 @@ sudo a2dissite 000-default
 # sudo rm -rf /var/www/html
 
 # Add new sites
-if [[ ! -f /etc/apache2/sites-avaialable/${hostname} ]]; then
+if [[ ! -f /etc/apache2/sites-available/${hostname} ]]; then
 	if [[ ${conf_path} =~ '://' ]]; then
 		curl --silent -L ${conf_path} > vhost.conf
 		sudo mv vhost.conf /etc/apache2/sites-available/${hostname}.conf
